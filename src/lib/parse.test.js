@@ -17,13 +17,13 @@ describe('parse', () => {
     it('should throw if invalid JSON', () => {
       expect(() => {
         parseTeamsJson('asdf');
-      }).toThrow();
+      }).toThrow('unable to parse teams data');
     });
 
     it('should throw if data is not an array', () => {
       expect(() => {
         parseTeamsJson('{}');
-      }).toThrow();
+      }).toThrow('teams data is not an array');
     });
 
     it('should parse valid JSON', () => {
@@ -40,34 +40,34 @@ describe('parse', () => {
   });
 
   describe('parseTeam', () => {
-    it('should throw if data is not an object', () => {
-      expect(() => {
-        parseTeam('');
-      }).toThrow('team data is not an object');
+    it('should return null if data is not an object', () => {
+      const result = parseTeam('');
+
+      expect(result).toEqual(null);
     });
 
-    it('should throw if data does not have name', () => {
-      expect(() => {
-        parseTeam({ score: 0 });
-      }).toThrow();
+    it('should return null if data does not have name', () => {
+      const result = parseTeam({});
+
+      expect(result).toEqual(null);
     });
 
-    it('should throw if data does not have score', () => {
-      expect(() => {
-        parseTeam({ name: 'asdf' });
-      }).toThrow();
+    it('should return null if data does not have score', () => {
+      const result = parseTeam({ name: 'x' }, ['x']);
+
+      expect(result).toEqual(null);
     });
 
-    it('should throw if data name is not a string', () => {
-      expect(() => {
-        parseTeam({ name: 1, score: 0 });
-      }).toThrow();
+    it('should return null if data name is not a string', () => {
+      const result = parseTeam({ name: 0, score: 0 });
+
+      expect(result).toEqual(null);
     });
 
-    it('should throw if data score is not a number', () => {
-      expect(() => {
-        parseTeam({ name: 'asdf', score: '0' });
-      }).toThrow();
+    it('should return null if data score is not a number', () => {
+      const result = parseTeam({ name: 'asdf', score: '0' });
+
+      expect(result).toEqual(null);
     });
 
     it('should parse valid data', () => {
@@ -87,7 +87,7 @@ describe('parse', () => {
     it('should throw if data is not an array of objects', () => {
       expect(() => {
         parseGamedayGames(['']);
-      }).toThrow();
+      }).toThrow('game data is not an object');
     });
 
     it('should throw if data is missing home or away', () => {
@@ -96,10 +96,10 @@ describe('parse', () => {
       }).toThrow('game data does not have home and away');
     });
 
-    it('should throw if data is not an array of objects with home and away', () => {
-      expect(() => {
-        parseGamedayGames([{ home: {}, away: {} }]);
-      }).toThrow();
+    it('should return empty array if data is not an array of objects with home and away', () => {
+      const result = parseGamedayGames([{ home: {}, away: {} }]);
+
+      expect(result).toEqual([]);
     });
 
     it('should not return a game if home or away is not valid', () => {

@@ -37,3 +37,12 @@ export function gamesTemplate(gamedays) {
   const body = JSON.stringify(gamedays, null, 2);
   return template(body);
 }
+
+/**
+ *
+ * @param {Array<import('./score').TeamStanding>} standings
+ */
+export function standingsTemplate(standings) {
+  const body = JSON.stringify(standings, null, 2);
+  return template(body);
+}

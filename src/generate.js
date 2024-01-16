@@ -5,8 +5,9 @@ import {
   readFile,
   readFilesFromDir,
 } from './lib/file.js';
-import { indexTemplate } from './lib/html.js';
+import { gamesTemplate, indexTemplate, standingsTemplate } from './lib/html.js';
 import { parseGamedayFile, parseTeamsJson } from './lib/parse.js';
+import { calculateStandings } from './lib/score.js';
 
 const INPUT_DIR = './data';
 const OUTPUT_DIR = './dist';
@@ -38,14 +39,25 @@ async function main() {
     try {
       gamedays.push(parseGamedayFile(file, teams));
     } catch (e) {
-      console.error(`unable to parse ${gamedayFile}`);
+      console.error(`unable to parse ${gamedayFile}`, e.message);
     }
   }
   console.info('gameday files parsed', gamedays.length);
 
-  await writeFile(join(OUTPUT_DIR, 'index.html'), indexTemplate(), {
-    flag: 'w+',
-  });
+  const allGames = [];
+  for (const gameday of gamedays) {
+    allGames.push(...gameday.games);
+  }
+
+  const standings = calculateStandings(allGames);
+
+  const indexFile = join(OUTPUT_DIR, 'index.html');
+  const gamesFile = join(OUTPUT_DIR, 'leikir.html');
+  const standingsFile = join(OUTPUT_DIR, 'stada.html');
+  await writeFile(indexFile, indexTemplate(), { flag: 'w+' });
+  await writeFile(gamesFile, gamesTemplate(gamedays), { flag: 'w+' });
+  await writeFile(standingsFile, standingsTemplate(standings), { flag: 'w+' });
+  console.info('finished generating');
 }
 
 main().catch((error) => {

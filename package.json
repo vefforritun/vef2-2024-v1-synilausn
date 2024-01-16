@@ -30,5 +30,10 @@
     "prettier": "^3.2.2",
     "stylelint": "^16.1.0",
     "stylelint-config-standard": "^36.0.0"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "./src/**/lib/**"
+    ]
   }
 }

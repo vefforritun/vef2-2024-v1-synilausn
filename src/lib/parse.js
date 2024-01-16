@@ -25,6 +25,7 @@
  * @returns {Array<string>} Array of team names, empty if no data.
  */
 export function parseTeamsJson(data) {
+  /** @type unknown */
   let teamsParsed;
   try {
     teamsParsed = JSON.parse(data);
@@ -48,30 +49,29 @@ export function parseTeamsJson(data) {
 }
 
 /**
- * Parse team data.
- * @param {object} data Potential team data.
+ * Parse team data. Skips illegal data.
+ * @param {unknown} data Potential team data.
  * @param {Array<string>} teams Array of team names.
  * @returns {Team | null} Team object.
  */
 export function parseTeam(data, teams = []) {
   if (typeof data !== 'object' || !data) {
-    throw new Error('team data is not an object');
+    // This is a bit annoying in our test output! How should we fix it?
+    console.warn('illegal team object', data);
+    return null;
   }
 
-  if (!('name' in data) || typeof data.name !== 'string') {
-    throw new Error('team data does not have name');
+  if (
+    !('name' in data) ||
+    typeof data.name !== 'string' ||
+    !teams.includes(data.name)
+  ) {
+    console.warn('illegal team data', data);
+    return null;
   }
 
   if (!('score' in data) || typeof data.score !== 'number') {
-    throw new Error('team data does not have score');
-  }
-
-  if (!teams.includes(data.name)) {
-    // Here we don't throw since we allow all team names, but only take into
-    // account the ones in the teams array, warn if not
-    // This is a bit annoying in out test output!
-    // How should we fix it??
-    console.warn('team name not in teams array', data.name);
+    console.warn('illegal team data', data);
     return null;
   }
 
