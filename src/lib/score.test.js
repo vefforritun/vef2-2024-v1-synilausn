@@ -17,25 +17,29 @@ describe('score', () => {
         },
         {
           home: { name: 'a', score: 1 },
-          away: { name: 'c', score: 1 },
+          away: { name: 'b', score: 1 },
         },
         {
-          home: { name: 'c', score: 1 },
-          away: { name: 'b', score: 2 },
+          home: { name: 'a', score: 1 },
+          away: { name: 'c', score: 10 },
+        },
+        {
+          home: { name: 'c', score: 2 },
+          away: { name: 'b', score: 1 },
         },
       ]);
 
       expect(result).toEqual([
+        {
+          name: 'c',
+          points: 6,
+        },
         {
           name: 'a',
           points: 4,
         },
         {
           name: 'b',
-          points: 3,
-        },
-        {
-          name: 'c',
           points: 1,
         },
       ]);

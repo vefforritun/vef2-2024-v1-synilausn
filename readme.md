@@ -11,20 +11,26 @@ Uppsetning á `package.json` skrá:
 - [`main`](https://docs.npmjs.com/cli/v10/configuring-npm/package-json#main) skilgreinir inngang í forritið sem `"main": "src/generate.js"`, en það í raun er ekki notað þar sem þetta er ekki pakki fyrir aðra til að nota.
 - [`engines`](https://docs.npmjs.com/cli/v10/configuring-npm/package-json#engines) skilgreinir að við notum `node` útgáfu 20.
 - [`scripts`](https://docs.npmjs.com/cli/v10/configuring-npm/package-json#scripts) skilgreinir skipanir sem við getum keyrt með `npm run`, sjá nánar að neðan.
+  - `build` keyrir ferli sem útbýr vefinn með því að keyra eftirfarandi skipanir í röð (með `npm-run-all` í _serial mode_):
+    - `clean` eyðir `dist` möppu ef til,
+    - `generate` býr til `dist` möppu,
+    - `copy-public` afritar `public` möppu yfir í `dist` möppu.
   - `test` keyrir prófanir.
   - `test:coverage` keyrir prófanir og birtir _code coverage_.
-  - `lint` keyrir bæði `eslint` og `stylelint` með `concurrently`.
+  - `lint` keyrir bæði `eslint` og `stylelint` með `npm-run-all` í _parallel_.
   - `lint:eslint` keyrir `eslint`.
   - `lint:stylelint` keyrir `stylelint`.
 - [`devDependencies`](https://docs.npmjs.com/cli/v10/configuring-npm/package-json#devdependencies) skilgreinir hvaða pakka við notum í þróun (_development_)
 
+## Forrit
+
+Forrit til að útbúa vef er í grunninn í `src/generate.js` sem notar kóða í `src/lib` möppu. Þessi kóði er skjalaður með `jsdoc` og öðrum athugasemdum þar sem við á.
+
+Aukalega er `src/generate-test-data.js` sem var notað til að útbúa gögn í `data/`.
+
 ## Linting
 
-`eslint` er uppsett og er hægt að keyra með `npm run lint`. Dæmi um úttak:
-
-```bash
-
-```
+`eslint` og `stylelint` er uppsett og er hægt að keyra með `npm run lint`.
 
 ## Prófanir
 
@@ -78,3 +84,5 @@ Ran all test suites matching /.\/*.test.js/i.
 ```
 
 Línur `23–24` eru ekki prófaðar þar sem þær munu búa til skrár, betra væri að nota _mock_ til að koma í veg fyrir að það gerist en er ekki gert hér.
+
+Þar sem `console.*` aðgerðir eru notaðar til að láta vita af ólöglegu inntaki getur myndast óþarfa úttak í prófum, þá er hægt að sleppa því með því að nota `--silent` við keyrslu prófa, t.d. `npm run test -- --silent`. Þetta er gert í `package.json` skrá.

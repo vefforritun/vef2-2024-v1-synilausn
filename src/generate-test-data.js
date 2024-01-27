@@ -17,27 +17,9 @@ const GAMES_TO_GENERATE = 6;
 const MATCH_DAYS_TO_GENERATE = 10;
 
 /**
- * @typedef {Object} Team
- * @property {string} name
- * @property {number} score
- */
-
-/**
- * @typedef {Object} Game
- * @property {Team} home
- * @property {Team} away
- */
-
-/**
- * @typedef {Object} MatchDay
- * @property {string} date
- * @property {Game[]} games
- */
-
-/**
  * Generate a single game.
  * @param {Array<string>} teams
- * @returns {Game}
+ * @returns {import("./lib/parse").Game}
  */
 function generateGame(teams, minScore = 0, maxScore = 6) {
   const teamsCopy = Array.from(teams);
@@ -67,7 +49,7 @@ function generateGame(teams, minScore = 0, maxScore = 6) {
  * @param {Array<string>} teams
  * @param {number} matchesToGenerate
  * @param {Date} date
- * @returns {MatchDay}
+ * @returns {import("./lib/parse").Gameday}
  */
 function generateMatchDay(teams, matchesToGenerate, date) {
   const games = [];
@@ -83,7 +65,7 @@ function generateMatchDay(teams, matchesToGenerate, date) {
   }
 
   return {
-    date: date.toISOString(),
+    date,
     games,
   };
 }

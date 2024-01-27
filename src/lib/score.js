@@ -30,6 +30,9 @@ export function calculateStandings(games) {
     return [];
   }
 
+  // Set the type of our object to be a record of name and standing, i.e.
+  // `{ teamName: { name: string; points: number; } }`
+  /** @type Record<string, TeamStanding> */
   const standings = {};
 
   for (const game of games) {
@@ -58,7 +61,10 @@ export function calculateStandings(games) {
     }
   }
 
-  const sorted = Object.values(standings).sort((a, b) => b.points - a.points);
+  // `standings` will be an object of format:
+  // `{ teamName: { name: string; points: number; } }`
+  // but we want to return a sorted array so we need to convert
+  const standingsAsArray = Object.values(standings);
 
-  return sorted;
+  return standingsAsArray.sort((a, b) => b.points - a.points);
 }

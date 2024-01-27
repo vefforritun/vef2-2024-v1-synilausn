@@ -11,16 +11,20 @@
     "node": "20"
   },
   "scripts": {
-    "test": "cross-env NODE_OPTIONS='--experimental-vm-modules' NODE_NO_WARNINGS=1 jest ./*.test.js",
-    "test:coverage": "cross-env NODE_OPTIONS='--experimental-vm-modules' NODE_NO_WARNINGS=1 jest ./*.test.js --coverage",
-    "lint": "concurrently npm:lint:*",
+    "build": "run-s build:*",
+    "build:delete-dist": "rimraf dist",
+    "build:generate": "node src/generate.js",
+    "build:copy-public": "cpy './public' './dist' --flat",
+    "dev": "browser-sync start --serveStatic ./dist --server --files ./public/styles.css ./dist/*.*",
+    "test": "cross-env NODE_OPTIONS='--experimental-vm-modules' NODE_NO_WARNINGS=1 jest ./*.test.js --silent",
+    "test:coverage": "cross-env NODE_OPTIONS='--experimental-vm-modules' NODE_NO_WARNINGS=1 jest ./*.test.js --coverage --silent",
+    "lint": "run-p lint:*",
     "lint:eslint": "eslint ./src/**/*.js",
     "lint:stylelint": "stylelint ./public/styles.css"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
     "browser-sync": "^3.0.2",
-    "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
     "eslint": "^8.56.0",
     "eslint-config-airbnb-base": "^15.0.0",
@@ -35,5 +39,10 @@
     "collectCoverageFrom": [
       "./src/**/lib/**"
     ]
+  },
+  "dependencies": {
+    "cpy-cli": "^5.0.0",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^5.0.5"
   }
 }

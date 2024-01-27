@@ -111,6 +111,15 @@ describe('parse', () => {
       expect(result).toEqual([]);
     });
 
+    it('should not return a game if home or away team has negative score', () => {
+      const result = parseGamedayGames(
+        [{ home: { name: 'foo', score: -1 }, away: { name: 'bar', score: 0 } }],
+        ['foo', 'bar'],
+      );
+
+      expect(result).toEqual([]);
+    });
+
     it('should parse valid data', () => {
       const result = parseGamedayGames(
         [{ home: { name: 'foo', score: 0 }, away: { name: 'bar', score: 0 } }],
