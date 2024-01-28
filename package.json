@@ -12,7 +12,7 @@
   },
   "scripts": {
     "build": "run-s build:*",
-    "build:delete-dist": "rimraf dist",
+    "build:clean": "rimraf dist",
     "build:generate": "node src/generate.js",
     "build:copy-public": "cpy './public' './dist' --flat",
     "dev": "browser-sync start --serveStatic ./dist --server --files ./public/styles.css ./dist/*.*",
